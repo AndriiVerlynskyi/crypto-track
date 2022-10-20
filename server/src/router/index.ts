@@ -4,4 +4,4 @@ import { etherController } from '../modules/ether-handler/index';
 
 export const appRouter = Router();
 
-appRouter.get('/ether/get', etherController.getEthTransactions);
+appRouter.get('/ether', etherController.getEthTransactions);

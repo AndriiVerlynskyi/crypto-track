@@ -1,12 +1,16 @@
 import React from "react";
 
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import { TransactionsPage } from "./modules/transactions";
+
+const queryCLient = new QueryClient();
 
 function App() {
   return (
-    <div>
+    <QueryClientProvider client={queryCLient}>
       <TransactionsPage />
-    </div>
+    </QueryClientProvider>
   );
 }
 

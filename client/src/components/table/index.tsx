@@ -1,9 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
+import { Transaction } from "../../interfaces";
 
 import "./styles.scss";
+import { Table } from "./table";
 
-export const TableBlock: React.FC = () => {
-  const [searchValue, setSearchValue] = useState("");
+interface TableBlockParams {
+  searchValue: string;
+  setSearchValue: (value: string) => void;
+  currSearchParam: string;
+  setCurrSearchParam: (value: string) => void;
+  transactions: Transaction[];
+}
+
+export const TableBlock: React.FC<TableBlockParams> = ({
+  transactions,
+  searchValue,
+  setSearchValue,
+  currSearchParam,
+  setCurrSearchParam,
+}) => {
   return (
     <div className="table-container-block">
       <div className="params-selection-block">
@@ -15,7 +30,11 @@ export const TableBlock: React.FC = () => {
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <div className="divider" />
-          <select name="search-param">
+          <select
+            name="search-param"
+            value={currSearchParam}
+            onChange={(e) => setCurrSearchParam(e.target.value)}
+          >
             <option value="address">Address</option>
             <option value="transId">Transaction ID</option>
             <option value="blockNum">Block number</option>
@@ -38,6 +57,7 @@ export const TableBlock: React.FC = () => {
           </svg>
         </div>
       </div>
+      <Table transactions={transactions} />
     </div>
   );
 };

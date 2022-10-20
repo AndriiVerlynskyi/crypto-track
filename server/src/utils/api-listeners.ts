@@ -46,6 +46,14 @@ export const initSheduledFunctions = () => {
           confirmations: 1
         });
       }
+      const allTransactions = await Transaction.find();
+
+      for (const serverTransaction of allTransactions) {
+        await Transaction.findByIdAndUpdate(serverTransaction._id, {
+          confirmations: serverTransaction.confirmations + 1
+        });
+      }
+
       // await Transaction.create(transactionsArr);
     } catch (err) {
       console.log(err);
