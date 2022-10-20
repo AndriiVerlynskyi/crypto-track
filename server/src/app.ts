@@ -1,21 +1,26 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
+import 'dotenv/config';
+
 import mongoose from 'mongoose';
 
 import { appRouter } from './router';
+import { initSheduledFunctions } from './utils/api-listeners';
 
 const app = express();
-
-mongoose.connect(process.env.DATABASE ?? '').then(() => console.log('Connected to the db'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('', appRouter)
+initSheduledFunctions();
+
+app.use('', appRouter);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`API is running on localhost:${PORT}`);
-});
+mongoose.connect(process.env.DATABASE ?? '').then(() =>
+  app.listen(PORT, () => {
+    console.log(`API is running on localhost:${PORT}`);
+  })
+);
