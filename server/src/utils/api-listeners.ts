@@ -1,60 +1,32 @@
 import { schedule } from 'node-cron';
 
 import { Transaction } from '../db/models/Transaction';
-import type { dbTransaction } from '../db/models/Transaction';
-import { EtherScanInstance } from './axios/etherscan-api';
-import { getEthNumber } from './math';
+import { EtherScanInstance } from './api/etherscan-api';
+
+const updatePreviousTransactionsConfirmation = async () => {
+  const allTransactions = await Transaction.find();
+
+  for (const serverTransaction of allTransactions) {
+    await Transaction.findByIdAndUpdate(serverTransaction._id, {
+      confirmations: serverTransaction.confirmations + 1
+    });
+  }
+};
 
 export const initSheduledFunctions = () => {
   const etherListener = schedule('*/12 * * * * *', async () => {
     try {
-      const {
-        data: { result }
-      } = await EtherScanInstance.getLastBlock();
+      const { result } = await EtherScanInstance.getLastBlock();
 
       const {
-        data: {
-          result: { transactions, timestamp }
-        }
+        result: { transactions, timestamp }
       } = await EtherScanInstance.getBlockByItsNumber(result);
 
-      const transactionsArr: dbTransaction[] = [];
+      await updatePreviousTransactionsConfirmation();
 
-      for (const transaction of transactions) {
-        const {
-          gas,
-          gasPrice,
-          maxPriorityFeePerGas,
-          from,
-          to,
-          blockNumber,
-          hash,
-          value: gweiValue
-        } = transaction;
-        const fee = getEthNumber(gas) * getEthNumber(gasPrice) + (maxPriorityFeePerGas || 0);
-        console.log(fee);
-        const value = getEthNumber(gweiValue);
+      const newTransactions = EtherScanInstance.transformApiResponseForDb(transactions, timestamp);
 
-        transactionsArr.push({
-          from,
-          to,
-          blockNumber,
-          hash,
-          value,
-          fee,
-          timestamp,
-          confirmations: 1
-        });
-      }
-      const allTransactions = await Transaction.find();
-
-      for (const serverTransaction of allTransactions) {
-        await Transaction.findByIdAndUpdate(serverTransaction._id, {
-          confirmations: serverTransaction.confirmations + 1
-        });
-      }
-
-      // await Transaction.create(transactionsArr);
+      // await Transaction.create(newTransactions);
     } catch (err) {
       console.log(err);
     }
