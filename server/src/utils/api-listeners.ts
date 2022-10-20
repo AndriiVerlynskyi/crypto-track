@@ -35,7 +35,16 @@ export const initSheduledFunctions = () => {
         console.log(fee);
         const value = getEthNumber(gweiValue);
 
-        transactionsArr.push({ from, to, blockNumber, hash, value, fee, timestamp });
+        transactionsArr.push({
+          from,
+          to,
+          blockNumber,
+          hash,
+          value,
+          fee,
+          timestamp,
+          confirmations: 1
+        });
       }
       // await Transaction.create(transactionsArr);
     } catch (err) {
