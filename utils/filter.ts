@@ -1,14 +1,13 @@
-import type QueryString from 'qs';
+import type { EthParams } from "../modules/ether-handler/service";
+import type { FilterQuery } from "mongoose";
+import type { dbTransaction } from "../db/models/Transaction";
 
-export const createFilter = (params: QueryString.ParsedQs) => {
-  const filter: Record<string, string | RegExp> = {};
-  const skipKeys = ['perPage, pageParam'];
+export const createEtherFilter = (query: EthParams) => {
+  const { address, transId, blockNum } = query;
+  const filter: FilterQuery<dbTransaction> = {};
 
-  Object.keys(params).forEach(key => {
-    if (!skipKeys.includes(key)) {
-      filter[key] = new RegExp(params[key] as string, 'i');
-    }
-  });
-
+  if (address) filter.$or = [{ from: address }, { to: address }];
+  if (transId) filter.hash = transId;
+  if (blockNum) filter.blockNumber = blockNum;
   return filter;
-};
+}

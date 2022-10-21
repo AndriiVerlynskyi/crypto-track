@@ -66,9 +66,11 @@
       tr {
         background-color: colors.$medium-gray;
       }
+
       tr:nth-child(even) {
         background-color: colors.$light-gray;
       }
+
       th {
         padding-left: 8px;
         text-align: left;
@@ -76,30 +78,35 @@
         font-weight: 400;
         padding: 4px;
       }
+
       th:nth-child(2) {
-        max-width: 13vw;
+        max-width: 12vw;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
+
       th:nth-child(3) {
-        max-width: 15vw;
+        max-width: 23vw;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
+
       th:nth-child(4) {
-        max-width: 15vw;
+        max-width: 23vw;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
+
       th:nth-child(5) {
         max-width: 10vw;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
       }
+
       th:nth-child(6) {
         max-width: 7vw;
         text-overflow: ellipsis;
