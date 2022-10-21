@@ -1,0 +1,27 @@
+@use "../../styles/general";
+@use "../../styles/colors";
+
+.header-container {
+  background-color: colors.$main-blue;
+  color: white;
+  vertical-align: center;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  @media only screen and (max-width: general.$breakpoint-small) {
+    text-align: center;
+    font-size: 30px;
+  }
+  @media only screen and (min-width: general.$breakpoint-small) and (max-width: general.$breakpoint-medium) {
+    text-align: center;
+    padding-left: 90px;
+    font-size: 35px;
+  }
+  @media only screen and (min-width: general.$breakpoint-medium) and (max-width: general.$breakpoint-large) {
+    padding-left: 90px;
+    font-size: 40px;
+  }
+  @media only screen and (min-width: general.$breakpoint-large) {
+    padding-left: 130px;
+    font-size: 40px;
+  }
+}
