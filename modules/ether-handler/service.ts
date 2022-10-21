@@ -1,5 +1,5 @@
-import { FilterQuery } from 'mongoose';
-import { dbTransaction, Transaction } from '../../db/models/Transaction';
+import type { FilterQuery } from 'mongoose';
+import { type dbTransaction, Transaction } from '../../db/models/Transaction';
 import { createEtherFilter } from '../../utils/filter';
 
 export type EthParams = {
@@ -19,7 +19,7 @@ export const getEthTransactions = async (query: EthParams) => {
     .skip(+perPage * (+pageParam - 1))
     .limit(+perPage);
 
-  const transactionsCount = await Transaction.count();
+  const transactionsCount = await Transaction.count(filter);
 
   return {
     transactions,

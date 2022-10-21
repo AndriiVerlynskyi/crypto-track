@@ -1,6 +1,6 @@
-import { EthParams } from "../modules/ether-handler/service";
-import { FilterQuery } from "mongoose";
-import { dbTransaction } from "../db/models/Transaction";
+import type { EthParams } from "../modules/ether-handler/service";
+import type { FilterQuery } from "mongoose";
+import type { dbTransaction } from "../db/models/Transaction";
 
 export const createEtherFilter = (query: EthParams) => {
   const { address, transId, blockNum } = query;
