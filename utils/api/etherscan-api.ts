@@ -30,47 +30,43 @@ export const getLastBlock = async (): Promise<{ data: BlockApiResponse }> => {
   });
 };
 
-export class EtherScan {
-  constructor() {
+export const getEthNumber = (hexNum: string | number) => {
+  // Value from api is in gwei, which is 10^-9 * ETH
+  return Number(hexNum) * Math.pow(10, -18);
+}
+
+export const transformApiResponseForDb = (transactions: Transaction[], timestamp: string) => {
+  const transactionsArr: dbTransaction[] = [];
+
+  for (const transaction of transactions) {
+    const {
+      gas,
+      gasPrice,
+      maxPriorityFeePerGas,
+      from,
+      to,
+      blockNumber,
+      hash,
+      value: gweiValue
+    } = transaction;
+    const fee =
+      Number(gas) *
+      (getEthNumber(gasPrice) +
+        (maxPriorityFeePerGas ? getEthNumber(maxPriorityFeePerGas) : 0));
+
+    const value = getEthNumber(gweiValue);
+
+    transactionsArr.push({
+      from,
+      to,
+      blockNumber,
+      hash,
+      value,
+      fee,
+      timestamp,
+      confirmations: 1
+    });
   }
-  static transformApiResponseForDb(transactions: Transaction[], timestamp: string) {
-    const transactionsArr: dbTransaction[] = [];
 
-    for (const transaction of transactions) {
-      const {
-        gas,
-        gasPrice,
-        maxPriorityFeePerGas,
-        from,
-        to,
-        blockNumber,
-        hash,
-        value: gweiValue
-      } = transaction;
-      const fee =
-        Number(gas) *
-        (EtherScan.getEthNumber(gasPrice) +
-          (maxPriorityFeePerGas ? EtherScan.getEthNumber(maxPriorityFeePerGas) : 0));
-
-      const value = EtherScan.getEthNumber(gweiValue);
-
-      transactionsArr.push({
-        from,
-        to,
-        blockNumber,
-        hash,
-        value,
-        fee,
-        timestamp,
-        confirmations: 1
-      });
-    }
-
-    return transactionsArr;
-  }
-
-  static getEthNumber(hexNum: string | number) {
-    // Value from api is in gwei, which is 10^-9 * ETH
-    return Number(hexNum) * Math.pow(10, -18);
-  }
+  return transactionsArr;
 }
