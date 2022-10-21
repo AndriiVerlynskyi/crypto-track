@@ -1,7 +1,7 @@
 import { schedule } from 'node-cron';
 
 import { Transaction } from '../db/models/Transaction';
-import { EtherScan, getLastBlock } from './api/etherscan-api';
+import { transformApiResponseForDb, getLastBlock } from './api/etherscan-api';
 
 const updatePreviousTransactionsConfirmation = async () => {
   const allTransactions = await Transaction.find();
@@ -21,7 +21,7 @@ export const initSheduledFunctions = () => {
 
       await updatePreviousTransactionsConfirmation();
 
-      await Transaction.create(EtherScan.transformApiResponseForDb(transactions, timestamp));
+      await Transaction.create(transformApiResponseForDb(transactions, timestamp));
     } catch (err) {
       console.log(err);
     }

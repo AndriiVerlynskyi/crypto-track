@@ -5,29 +5,35 @@
   position: absolute;
   bottom: 0;
   margin-top: 40;
-  width: 100vw;
+  min-width: 100vw;
+  width: '100%';
   background-color: colors.$secondary-blue;
   color: white;
   vertical-align: center;
   padding-top: 15px;
   padding-bottom: 10px;
+
   :first-child {
     margin: 0;
     font-size: 24px;
   }
+
   :nth-child(2) {
     margin: 0;
     font-size: 16px;
     align-self: center;
   }
+
   :last-child {
     margin: 0;
     font-size: 16px;
   }
+
   @media only screen and (max-width: general.$breakpoint-medium) {
     text-align: center;
     align-content: center;
   }
+
   @media only screen and (min-width: general.$breakpoint-medium) {
     display: flex;
     justify-content: space-around;
