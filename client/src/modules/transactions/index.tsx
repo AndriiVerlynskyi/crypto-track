@@ -23,6 +23,7 @@ export const TransactionsPage: React.FC = () => {
     data: queryData,
     error,
     refetch,
+    isLoading,
   } = useQuery<
     AxiosResponse<{
       transactions: Transaction[];
@@ -39,6 +40,8 @@ export const TransactionsPage: React.FC = () => {
       <Header />
       {error ? (
         <p>Error while uploading transactions</p>
+      ) : isLoading ? (
+        <p>Loading...</p>
       ) : (
         queryData && (
           <>
