@@ -1,7 +1,7 @@
 import { schedule } from 'node-cron';
 
 import { Transaction } from '../db/models/Transaction';
-import { EtherScanInstance } from './api/etherscan-api';
+import { EtherScan, getLastBlock } from './api/etherscan-api';
 
 const updatePreviousTransactionsConfirmation = async () => {
   const allTransactions = await Transaction.find();
@@ -17,17 +17,11 @@ export const initSheduledFunctions = () => {
   // every 12 seconds
   const etherListener = schedule('*/12 * * * * *', async () => {
     try {
-      const { result } = await EtherScanInstance.getLastBlock();
-
-      const {
-        result: { transactions, timestamp }
-      } = await EtherScanInstance.getBlockByItsNumber(result);
+      const { data: { result: { transactions, timestamp } } } = await getLastBlock();
 
       await updatePreviousTransactionsConfirmation();
 
-      const newTransactions = EtherScanInstance.transformApiResponseForDb(transactions, timestamp);
-
-      await Transaction.create(newTransactions);
+      await Transaction.create(EtherScan.transformApiResponseForDb(transactions, timestamp));
     } catch (err) {
       console.log(err);
     }

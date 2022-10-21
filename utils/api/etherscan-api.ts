@@ -1,50 +1,39 @@
 import type { dbTransaction } from '../../db/models/Transaction';
 import type { BlockApiResponse, Transaction } from '../../typedef';
 
+const ETHER_API_KEY = process.env.ETHER_API_TOKEN;
+
 // axios problem, allows only to import with
 const axios = require('axios');
 
-enum BlockActions {
-  getLastBlock = 'eth_blockNumber',
-  getBlockByNumber = 'eth_getBlockByNumber'
-}
+const etherAxiosInstance = axios.create({
+  baseURL: 'https://api.etherscan.io/api'
+});
+
+export const getLastBlock = async (): Promise<{ data: BlockApiResponse }> => {
+  const lastBlockNumber = await etherAxiosInstance.get('', {
+    params: {
+      module: 'proxy',
+      apiKey: ETHER_API_KEY,
+      action: 'eth_blockNumber'
+    }
+  });
+
+  return await etherAxiosInstance.get('', {
+    params: {
+      module: 'proxy',
+      action: 'eth_getBlockByNumber',
+      apiKey: ETHER_API_KEY,
+      tag: lastBlockNumber.data.result,
+      boolean: true
+    }
+  });
+};
 
 export class EtherScan {
-  public etherScanAxiosInstance;
-  private apiKey;
-
   constructor() {
-    this.etherScanAxiosInstance = axios.create({
-      baseURL: 'https://api.etherscan.io/api'
-    });
-    this.apiKey = process.env.ETHER_API_TOKEN;
   }
-
-  async getBlockReq(params: { tag?: string | number; boolean?: boolean; action: BlockActions }) {
-    return await this.etherScanAxiosInstance.get('', {
-      params: {
-        module: 'proxy',
-        apiKey: this.apiKey,
-        ...params
-      }
-    });
-  }
-
-  async getLastBlock(): Promise<{ id: number; result: string }> {
-    const result = await this.getBlockReq({ action: BlockActions.getLastBlock });
-    return result.data;
-  }
-
-  async getBlockByItsNumber(blockNum: string | number): Promise<BlockApiResponse> {
-    const result = await this.getBlockReq({
-      action: BlockActions.getBlockByNumber,
-      tag: blockNum,
-      boolean: true
-    });
-    return result.data;
-  }
-
-  transformApiResponseForDb(transactions: Transaction[], timestamp: string) {
+  static transformApiResponseForDb(transactions: Transaction[], timestamp: string) {
     const transactionsArr: dbTransaction[] = [];
 
     for (const transaction of transactions) {
@@ -60,10 +49,10 @@ export class EtherScan {
       } = transaction;
       const fee =
         Number(gas) *
-        (this.getEthNumber(gasPrice) +
-          (maxPriorityFeePerGas ? this.getEthNumber(maxPriorityFeePerGas) : 0));
+        (EtherScan.getEthNumber(gasPrice) +
+          (maxPriorityFeePerGas ? EtherScan.getEthNumber(maxPriorityFeePerGas) : 0));
 
-      const value = this.getEthNumber(gweiValue);
+      const value = EtherScan.getEthNumber(gweiValue);
 
       transactionsArr.push({
         from,
@@ -80,10 +69,8 @@ export class EtherScan {
     return transactionsArr;
   }
 
-  getEthNumber(hexNum: string | number) {
+  static getEthNumber(hexNum: string | number) {
     // Value from api is in gwei, which is 10^-9 * ETH
     return Number(hexNum) * Math.pow(10, -18);
   }
 }
-
-export const EtherScanInstance = new EtherScan();
