@@ -9,8 +9,14 @@ export type TransactionParams =
       transId?: string;
       blockNum?: string;
       pageParam: number;
+      perPage?: number;
     }
   | undefined;
 
+type GetTransactionsType = {
+  totalPages: number;
+  transactions: Transaction[];
+};
+
 export const getTransactions = (params: TransactionParams) =>
-  axiosInstance.get<Transaction[]>("ether", { params });
+  axiosInstance.get<GetTransactionsType>("ether", { params });

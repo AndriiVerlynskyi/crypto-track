@@ -1,7 +1,9 @@
 @use "../../styles//colors";
 
 .table-container-block {
-  align-self: center;
+  align-items: center;
+  padding: 35px;
+
   .params-selection-block {
     display: flex;
 
@@ -28,7 +30,9 @@
       width: 330px;
 
       .text-input {
-        padding-left: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 14px;
         width: 250px;
         border: 1px solid colors.$medium-gray;
         border-right: 0;
@@ -50,6 +54,32 @@
         border-width: 0;
         background-color: white;
       }
+    }
+  }
+
+  table {
+    margin-top: 15px;
+
+    tbody {
+      tr {
+        height: 32px !important;
+        background-color: colors.$medium-gray;
+      }
+      tr:nth-child(even) {
+        background-color: colors.$light-gray;
+      }
+      th {
+        height: 32px !important;
+        font-weight: 400;
+        padding: 4px;
+      }
+    }
+
+    .header-row {
+      background-color: colors.$main-blue;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      color: white;
     }
   }
 }

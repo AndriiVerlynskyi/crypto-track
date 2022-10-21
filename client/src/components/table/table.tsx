@@ -2,6 +2,7 @@ import React from "react";
 import { Transaction } from "../../interfaces";
 
 import { getDataFromTimestamp } from "../../services/date";
+import "./styles.scss";
 
 interface TableProps {
   transactions: Transaction[];
@@ -25,7 +26,11 @@ export const Table: React.FC<TableProps> = ({ transactions }) => {
           <tr>
             <th>{transaction.blockNumber}</th>
             <th>
-              <a href={`https://etherscan.io/tx/${transaction.hash}`}>
+              <a
+                href={`https://etherscan.io/tx/${transaction.hash}`}
+                rel="noreferrer"
+                target="_blank"
+              >
                 {transaction.hash}
               </a>
             </th>

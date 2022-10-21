@@ -5,7 +5,7 @@ export type Transaction = {
   blockNumber: string;
   gas: string;
   gasPrice: string;
-  maxPriorityFeePerGas: string;
+  maxPriorityFeePerGas?: string;
   value: string;
 };
 

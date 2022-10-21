@@ -1,0 +1,30 @@
+@use "../../styles/colors";
+
+.paginator-container {
+  display: flex;
+  align-items: center;
+
+  .paginator-option {
+    display: flex;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 2px solid colors.$medium-gray;
+    color: colors.$base-text;
+
+    &:hover {
+      border: 2px solid colors.$main-blue;
+    }
+  }
+
+  .active {
+    background-color: colors.$main-blue;
+    border-color: colors.$main-blue;
+    color: white;
+  }
+}

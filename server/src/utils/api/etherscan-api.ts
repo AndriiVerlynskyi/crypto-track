@@ -58,12 +58,12 @@ export class EtherScan {
         hash,
         value: gweiValue
       } = transaction;
-
       const fee =
-        EtherScan.getEthNumber(gas) * EtherScan.getEthNumber(gasPrice) +
-        (EtherScan.getEthNumber(maxPriorityFeePerGas) || 0);
-      console.log(fee);
-      const value = EtherScan.getEthNumber(gweiValue);
+        Number(gas) *
+        (this.getEthNumber(gasPrice) +
+          (maxPriorityFeePerGas ? this.getEthNumber(maxPriorityFeePerGas) : 0));
+
+      const value = this.getEthNumber(gweiValue);
 
       transactionsArr.push({
         from,
@@ -80,9 +80,9 @@ export class EtherScan {
     return transactionsArr;
   }
 
-  static getEthNumber(hexNum: string | number) {
+  getEthNumber(hexNum: string | number) {
     // Value from api is in gwei, which is 10^-9 * ETH
-    return Number(hexNum) * Math.pow(10, -9);
+    return Number(hexNum) * Math.pow(10, -18);
   }
 }
 

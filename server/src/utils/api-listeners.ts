@@ -14,6 +14,7 @@ const updatePreviousTransactionsConfirmation = async () => {
 };
 
 export const initSheduledFunctions = () => {
+  // every 12 seconds
   const etherListener = schedule('*/12 * * * * *', async () => {
     try {
       const { result } = await EtherScanInstance.getLastBlock();
@@ -26,7 +27,7 @@ export const initSheduledFunctions = () => {
 
       const newTransactions = EtherScanInstance.transformApiResponseForDb(transactions, timestamp);
 
-      // await Transaction.create(newTransactions);
+      await Transaction.create(newTransactions);
     } catch (err) {
       console.log(err);
     }

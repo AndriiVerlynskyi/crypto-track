@@ -13,7 +13,14 @@ export type EthParams = {
 export const getEthTransactions = async (query: EthParams) => {
   const { perPage = 14, pageParam } = query;
   const filter = createFilter(query);
-  return await Transaction.find(filter)
+  const transactions = await Transaction.find(filter)
     .skip(+perPage * (+pageParam - 1))
     .limit(+perPage);
+
+  const transactionsCount = await Transaction.count();
+
+  return {
+    transactions,
+    totalPages: Math.ceil(transactionsCount / +perPage)
+  };
 };
