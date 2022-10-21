@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
 
 import 'dotenv/config';
 
@@ -21,6 +22,10 @@ initialaziFirstBlocks()
 app.use('', appRouter);
 
 app.use(express.static(__dirname + '/'));
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+});
 
 const PORT = process.env.PORT || 5000;
 
