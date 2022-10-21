@@ -1,7 +1,7 @@
 import { type dbTransaction, Transaction } from '../db/models/Transaction';
 import { EtherScanInstance } from './api/etherscan-api';
 
-const INITIAL_BLOCKS_AMOUNT = 20;
+const INITIAL_BLOCKS_AMOUNT = 1000;
 
 export const initialaziFirstBlocks = async () => {
   try {
