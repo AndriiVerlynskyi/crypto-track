@@ -58,7 +58,7 @@ export const transformApiResponseForDb = (transactions: Transaction[], timestamp
     transactionsArr.push({
       from,
       to,
-      blockNumber,
+      blockNumber: Number(blockNumber),
       hash,
       value,
       fee,
