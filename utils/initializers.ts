@@ -8,11 +8,14 @@ export const initialaziFirstBlocks = async () => {
     const prevTransactions = await Transaction.find();
 
     if (!prevTransactions.length) {
-
       for (let i = 0; i < INITIAL_BLOCKS_AMOUNT; i++) {
-        const { data: { result: { transactions, timestamp } } } = await getLastBlock();
+        const {
+          data: {
+            result: { transactions, timestamp }
+          }
+        } = await getLastBlock();
 
-        await Transaction.create(transformApiResponseForDb(transactions, timestamp));
+        await Transaction.create(transformApiResponseForDb(transactions, +timestamp));
 
         // In free plan api it's allowded to make 5 requests per second
         await new Promise<void>(resolve => {

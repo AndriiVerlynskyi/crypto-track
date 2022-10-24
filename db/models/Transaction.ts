@@ -7,7 +7,7 @@ export interface dbTransaction {
   blockNumber: string;
   fee: number;
   value: number;
-  timestamp: string;
+  timestamp: number;
   confirmations: number;
 }
 
@@ -19,7 +19,7 @@ const transactionSchema = new Schema<dbTransaction>({
   fee: { type: Number, required: true },
   value: { type: Number, required: true },
   confirmations: { type: Number, required: true },
-  timestamp: { type: String, required: true }
+  timestamp: { type: Number, required: true }
 });
 
 export const Transaction = model<dbTransaction>('Transaction', transactionSchema);

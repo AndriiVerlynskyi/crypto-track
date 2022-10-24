@@ -14,11 +14,10 @@ export const getEthTransactions = async (query: EthParams) => {
   const { perPage = 14, pageParam } = query;
   const filter: FilterQuery<dbTransaction> = createEtherFilter(query);
 
-
   const transactions = await Transaction.find(filter)
+    .sort({ timestamp: -1 })
     .skip(+perPage * (+pageParam - 1))
     .limit(+perPage);
-
   const transactionsCount = await Transaction.count(filter);
 
   return {

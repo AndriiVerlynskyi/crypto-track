@@ -33,9 +33,9 @@ export const getLastBlock = async (): Promise<{ data: BlockApiResponse }> => {
 export const getEthNumber = (hexNum: string | number) => {
   // Value from api is in gwei, which is 10^-9 * ETH
   return Number(hexNum) * Math.pow(10, -18);
-}
+};
 
-export const transformApiResponseForDb = (transactions: Transaction[], timestamp: string) => {
+export const transformApiResponseForDb = (transactions: Transaction[], timestamp: number) => {
   const transactionsArr: dbTransaction[] = [];
 
   for (const transaction of transactions) {
@@ -51,8 +51,7 @@ export const transformApiResponseForDb = (transactions: Transaction[], timestamp
     } = transaction;
     const fee =
       Number(gas) *
-      (getEthNumber(gasPrice) +
-        (maxPriorityFeePerGas ? getEthNumber(maxPriorityFeePerGas) : 0));
+      (getEthNumber(gasPrice) + (maxPriorityFeePerGas ? getEthNumber(maxPriorityFeePerGas) : 0));
 
     const value = getEthNumber(gweiValue);
 
@@ -69,4 +68,4 @@ export const transformApiResponseForDb = (transactions: Transaction[], timestamp
   }
 
   return transactionsArr;
-}
+};
