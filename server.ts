@@ -15,9 +15,9 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// initialaziFirstBlocks()
-//   .then(() => initSheduledFunctions())
-//   .catch(err => console.log('Smth went wrong while initializing first block', err));
+initialaziFirstBlocks()
+  .then(() => initSheduledFunctions())
+  .catch(err => console.log('Smth went wrong while initializing first block', err));
 
 app.use('', appRouter);
 
