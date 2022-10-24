@@ -31,7 +31,7 @@ export const TransactionsPage: React.FC = () => {
       transactions: Transaction[];
       totalPages: number;
     }>
-  >([QueryKeys.TRANSACTIONS, currPage], async () => {
+  >([QueryKeys.TRANSACTIONS, currPage, currSearchParam], async () => {
     return await getTransactions({
       [currSearchParam]: searchValue ?? undefined,
       pageParam: currPage,
